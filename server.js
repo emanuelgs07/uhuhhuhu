@@ -1,31 +1,41 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
-const fetch = require('node-fetch');
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+const fetch = require("node-fetch");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.static('public'));
+app.use(express.static("public"));
 
-app.get('/news', async (req, res) => {
+// Rota principal -> envia o index.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// Rota para buscar notícias da API
+app.get("/news", async (req, res) => {
   try {
     const apiKey = process.env.NEWS_API_KEY;
 
     if (!apiKey) {
-      return res.status(500).json({ error: 'API key não configurada' });
+      return res.status(500).json({ error: "API key não configurada" });
     }
 
-    const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`);
+    const response = await fetch(
+      https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}
+    );
     const data = await response.json();
     res.json(data);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Erro ao buscar notícias' });
+    res.status(500).json({ error: "Erro ao buscar notícias" });
   }
 });
 
+// Iniciar servidor
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(Servidor rodando na porta ${PORT});
 });
